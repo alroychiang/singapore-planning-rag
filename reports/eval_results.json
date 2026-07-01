@@ -1,0 +1,486 @@
+{
+  "run_at": "2026-07-01T05:46:54+00:00",
+  "embedding_model": "all-MiniLM-L6-v2",
+  "k_values": [
+    5,
+    10
+  ],
+  "overall": {
+    "precision_at_5": 0.25,
+    "recall_at_5": 0.8055555555555556,
+    "precision_at_10": 0.14166666666666666,
+    "recall_at_10": 0.9166666666666666,
+    "mrr": 0.6092592592592593,
+    "n_queries": 12
+  },
+  "per_category": {
+    "checkbox_table": {
+      "precision_at_5": 0.13333333333333333,
+      "recall_at_5": 0.6666666666666666,
+      "precision_at_10": 0.1,
+      "recall_at_10": 1.0,
+      "mrr": 0.7037037037037037,
+      "n_queries": 3
+    },
+    "domain_terminology": {
+      "precision_at_5": 0.4,
+      "recall_at_5": 0.8888888888888888,
+      "precision_at_10": 0.23333333333333334,
+      "recall_at_10": 1.0,
+      "mrr": 0.75,
+      "n_queries": 3
+    },
+    "parameter_table": {
+      "precision_at_5": 0.3333333333333333,
+      "recall_at_5": 1.0,
+      "precision_at_10": 0.16666666666666666,
+      "recall_at_10": 1.0,
+      "mrr": 0.7333333333333334,
+      "n_queries": 3
+    },
+    "prose": {
+      "precision_at_5": 0.13333333333333333,
+      "recall_at_5": 0.6666666666666666,
+      "precision_at_10": 0.06666666666666667,
+      "recall_at_10": 0.6666666666666666,
+      "mrr": 0.25,
+      "n_queries": 3
+    }
+  },
+  "should_refuse_queries": [
+    {
+      "id": "q13",
+      "query": "What is the average cost of a condominium in Singapore?"
+    },
+    {
+      "id": "q14",
+      "query": "Who is the current CEO of URA?"
+    },
+    {
+      "id": "q15",
+      "query": "What is the plot ratio for my plot of land at 123 Sengkang Drive?"
+    }
+  ],
+  "per_query": [
+    {
+      "id": "q01",
+      "category": "parameter_table",
+      "query": "What is the road buffer for an expressway?",
+      "relevant_chunk_ids": [
+        "Summary-B2_p0_t0_r3",
+        "Summary-Commercial_p0_t0_r3",
+        "Summary-B1_p0_t0_r3"
+      ],
+      "retrieved_top_k": [
+        "Summary-Commercial_p0_t0_r3",
+        "Summary-Hotel_p0_t0_r3",
+        "Summary-B1_p0_t0_r3",
+        "Summary-B2_p0_t0_r3",
+        "Summary-BP_p0_t0_r4",
+        "Summary-CCI_p1_t0_r3",
+        "Summary-CCI_p5_t0_r2",
+        "Summary-HMC_p0_t0_r6",
+        "Summary-PW_p2_t0_r1",
+        "Summary-Transport_p0_t0_r4"
+      ],
+      "metrics": {
+        "precision_at_5": 0.6,
+        "recall_at_5": 1.0,
+        "precision_at_10": 0.3,
+        "recall_at_10": 1.0,
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "id": "q02",
+      "category": "parameter_table",
+      "query": "What is the minimum unit size for B1 industrial developments?",
+      "relevant_chunk_ids": [
+        "Summary-B1_p1_t0_r6"
+      ],
+      "retrieved_top_k": [
+        "Summary-B1_p1_t0_r6",
+        "Summary-B2_p1_t0_r5",
+        "MP25WrittenStatement_p13_t0_r1",
+        "Summary-Commercial_p1_t0_r8",
+        "Summary-Hotel_p2_t0_r1",
+        "MP25WrittenStatement_p13_t0_r2",
+        "MP25WrittenStatement_p14_t0_r1",
+        "Summary-BP_p1_t0_r7",
+        "MP25WrittenStatement_p14_t0_r2",
+        "Summary-Semi-Detached_p4_t1_r2"
+      ],
+      "metrics": {
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "precision_at_10": 0.1,
+        "recall_at_10": 1.0,
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "id": "q03",
+      "category": "parameter_table",
+      "query": "What is the minimum floor-to-floor height in B1 industrial buildings?",
+      "relevant_chunk_ids": [
+        "Summary-B1_p0_t0_r10"
+      ],
+      "retrieved_top_k": [
+        "Summary-B2_p0_t0_r10",
+        "Summary-Commercial_p5_t1_r4",
+        "Summary-CCI_p5_t0_r1",
+        "Summary-Commercial_p5_t0_r1",
+        "Summary-B1_p0_t0_r10",
+        "Summary-Commercial_p5_t0_r2",
+        "Summary-Commercial_p5_t1_r5",
+        "Summary-FC-v2_p2_t0_r4",
+        "Summary-Commercial_p0_t0_r10",
+        "Summary-HMC_p0_t0_r5"
+      ],
+      "metrics": {
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "precision_at_10": 0.1,
+        "recall_at_10": 1.0,
+        "first_relevant_rank": 5,
+        "reciprocal_rank": 0.2
+      }
+    },
+    {
+      "id": "q04",
+      "category": "checkbox_table",
+      "query": "Is a void deck included as GFA?",
+      "relevant_chunk_ids": [
+        "Summary_GFA_p2_t0_r18"
+      ],
+      "retrieved_top_k": [
+        "Summary_GFA_p2_t0_r18",
+        "Summary_GFA_p1_t0_r33",
+        "Summary_GFA_p1_t0_r22",
+        "Summary_GFA_p2_t0_r10",
+        "Summary_GFA_p2_t0_r11",
+        "Summary_GFA_p2_t0_r9",
+        "Summary_GFA_p0_t2_r2",
+        "Summary_GFA_p0_t1_r3",
+        "Summary_GFA_p1_t0_r2",
+        "Summary_GFA_p2_t0_r19"
+      ],
+      "metrics": {
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "precision_at_10": 0.1,
+        "recall_at_10": 1.0,
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "id": "q05",
+      "category": "checkbox_table",
+      "query": "Are bay windows counted toward GFA?",
+      "relevant_chunk_ids": [
+        "Summary_GFA_p0_t3_r4"
+      ],
+      "retrieved_top_k": [
+        "Summary_GFA_p1_t0_r30",
+        "Summary_GFA_p1_t0_r9",
+        "Summary-CCI_p4_t1_r3",
+        "Summary-HMC_p1_t0_r6",
+        "Summary-Commercial_p4_t0_r2",
+        "Summary_GFA_p0_t2_r2",
+        "Summary_GFA_p2_t0_r9",
+        "Summary_GFA_p1_t0_r20",
+        "Summary_GFA_p0_t3_r4",
+        "Summary_GFA_p0_t1_r3"
+      ],
+      "metrics": {
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0,
+        "precision_at_10": 0.1,
+        "recall_at_10": 1.0,
+        "first_relevant_rank": 9,
+        "reciprocal_rank": 0.1111111111111111
+      }
+    },
+    {
+      "id": "q06",
+      "category": "checkbox_table",
+      "query": "Is a roof cover excluded from GFA calculations?",
+      "relevant_chunk_ids": [
+        "Summary_GFA_p2_t0_r1"
+      ],
+      "retrieved_top_k": [
+        "Summary_GFA_p2_t0_r1",
+        "Summary_GFA_p2_t0_r4",
+        "Summary_GFA_p2_t0_r3",
+        "Summary_GFA_p1_t0_r27",
+        "Summary_GFA_p2_t0_r9",
+        "Summary_GFA_p1_t0_r11",
+        "Summary-FC-v2_p0_t0_r5",
+        "Summary-SR_p1_t0_r7",
+        "Summary_GFA_p2_t0_r19",
+        "Summary-Hotel_p0_t0_r2"
+      ],
+      "metrics": {
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "precision_at_10": 0.1,
+        "recall_at_10": 1.0,
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "id": "q07",
+      "category": "domain_terminology",
+      "query": "What is the maximum plot ratio for HDB residential estates?",
+      "relevant_chunk_ids": [
+        "Summary-EI_p0_t0_r4",
+        "Summary-CCI_p0_t0_r4",
+        "Summary-PW_p0_t0_r4"
+      ],
+      "retrieved_top_k": [
+        "Summary-PW_p0_t0_r4",
+        "Summary-CCI_p0_t0_r4",
+        "Summary-EI_p0_t0_r4",
+        "Summary-Semi-Detached_p0_t0_r1",
+        "Summary-PW_p0_t0_r10",
+        "Summary-CCI_p0_t0_r5",
+        "Summary-PW_p0_t0_r5",
+        "Summary-EI_p0_t0_r5",
+        "Summary-Strata-Landed-Housing_p1_t1_r3",
+        "Summary-Strata-Landed-Housing_p1_t1_r4"
+      ],
+      "metrics": {
+        "precision_at_5": 0.6,
+        "recall_at_5": 1.0,
+        "precision_at_10": 0.3,
+        "recall_at_10": 1.0,
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "id": "q08",
+      "category": "domain_terminology",
+      "query": "What is the GPR for landed housing fringe areas?",
+      "relevant_chunk_ids": [
+        "Summary-CCI_p0_t0_r3",
+        "Summary-EI_p0_t0_r3",
+        "Summary-PW_p0_t0_r3"
+      ],
+      "retrieved_top_k": [
+        "Summary-EI_p0_t0_r10",
+        "Summary-PW_p0_t0_r9",
+        "Summary-CCI_p0_t0_r10",
+        "Summary-CCI_p0_t0_r3",
+        "Summary-EI_p0_t0_r3",
+        "Summary-PW_p0_t0_r3",
+        "Summary-PW_p0_t1_r2",
+        "Summary-EI_p0_t0_r9",
+        "Summary-CCI_p0_t0_r9",
+        "Summary-PW_p0_t0_r8"
+      ],
+      "metrics": {
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.6666666666666666,
+        "precision_at_10": 0.3,
+        "recall_at_10": 1.0,
+        "first_relevant_rank": 4,
+        "reciprocal_rank": 0.25
+      }
+    },
+    {
+      "id": "q09",
+      "category": "domain_terminology",
+      "query": "What zoning covers religious buildings like temples and mosques?",
+      "relevant_chunk_ids": [
+        "MP25WrittenStatement_p16_t0_r1"
+      ],
+      "retrieved_top_k": [
+        "MP25WrittenStatement_p16_t0_r1",
+        "MP25WrittenStatement_p12_t0_r2",
+        "Summary-EI_p7_t0_r1",
+        "Summary-PW_p1_t0_r3",
+        "Summary-FC-v2_p2_t0_r6",
+        "dc25-11_DTC_p9_t0_r2",
+        "MP25WrittenStatement_p10_t0_r3",
+        "dc25-11_DTC_p2_t0_r1",
+        "MP25WrittenStatement_p10_t0_r2",
+        "dc25-11_DTC_p2_t0_r2"
+      ],
+      "metrics": {
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "precision_at_10": 0.1,
+        "recall_at_10": 1.0,
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "id": "q10",
+      "category": "prose",
+      "query": "What is the definition of plot ratio in the Master Plan?",
+      "relevant_chunk_ids": [
+        "MP25WrittenStatement_p5_para0"
+      ],
+      "retrieved_top_k": [
+        "Summary-Commercial_p0_t0_r1",
+        "Summary-HMC_p0_t0_r2",
+        "Summary-Hotel_p0_t0_r1",
+        "Summary-SR_p0_t0_r1",
+        "Summary-Transport_p0_t0_r1",
+        "Summary-B1_p0_t0_r1",
+        "Summary-BP_p0_t0_r1",
+        "Summary-B2_p0_t0_r1",
+        "Summary-FC-v2_p0_t0_r3",
+        "MP25WrittenStatement_p1_para0"
+      ],
+      "metrics": {
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0,
+        "precision_at_10": 0.0,
+        "recall_at_10": 0.0,
+        "first_relevant_rank": null,
+        "reciprocal_rank": 0.0
+      }
+    },
+    {
+      "id": "q11",
+      "category": "prose",
+      "query": "Which act defines what counts as a national park?",
+      "relevant_chunk_ids": [
+        "MP25WrittenStatement_p5_para0"
+      ],
+      "retrieved_top_k": [
+        "MP25WrittenStatement_p25_t0_r1",
+        "MP25WrittenStatement_p25_t0_r2",
+        "MP25WrittenStatement_p25_t0_r5",
+        "MP25WrittenStatement_p5_para0",
+        "MP25WrittenStatement_p17_t0_r1",
+        "MP25WrittenStatement_p25_t0_r6",
+        "Summary-BP_p1_t0_r5",
+        "Summary-CCI_p2_t0_r5",
+        "Summary-PW_p3_t0_r5",
+        "Summary-Transport_p1_t0_r5"
+      ],
+      "metrics": {
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "precision_at_10": 0.1,
+        "recall_at_10": 1.0,
+        "first_relevant_rank": 4,
+        "reciprocal_rank": 0.25
+      }
+    },
+    {
+      "id": "q12",
+      "category": "prose",
+      "query": "When was the first Master Plan for Singapore approved?",
+      "relevant_chunk_ids": [
+        "MP25WrittenStatement_p2_para0"
+      ],
+      "retrieved_top_k": [
+        "MP25WrittenStatement_p0_para0",
+        "MP25WrittenStatement_p2_para0",
+        "MP25WrittenStatement_p23_t0_r18",
+        "MP25WrittenStatement_p22_t0_r8",
+        "MP25WrittenStatement_p21_t0_r19",
+        "MP25WrittenStatement_p24_t0_r6",
+        "dc25-11_DTC_p0_t0_r1",
+        "MP25WrittenStatement_p25_t0_r3",
+        "Summary-Commercial_p0_t0_r1",
+        "Summary-Transport_p0_t0_r1"
+      ],
+      "metrics": {
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "precision_at_10": 0.1,
+        "recall_at_10": 1.0,
+        "first_relevant_rank": 2,
+        "reciprocal_rank": 0.5
+      }
+    },
+    {
+      "id": "q13",
+      "category": "should_refuse",
+      "query": "What is the average cost of a condominium in Singapore?",
+      "relevant_chunk_ids": [],
+      "retrieved_top_k": [
+        "Summary-Strata-Landed-Housing_p1_t1_r3",
+        "Summary-Strata-Landed-Housing_p1_t1_r1",
+        "Summary-FC-v2_p1_t0_r2",
+        "Summary-Strata-Landed-Housing_p1_t1_r4",
+        "Summary-Strata-Landed-Housing_p1_t1_r2",
+        "Summary-FC-v2_p1_t0_r1",
+        "MP25WrittenStatement_p23_t0_r18",
+        "Summary-FC-v2_p0_t0_r1",
+        "Summary-CCI_p0_t0_r6",
+        "Summary-EI_p0_t0_r6"
+      ],
+      "metrics": {
+        "precision_at_5": 0.0,
+        "recall_at_5": null,
+        "precision_at_10": 0.0,
+        "recall_at_10": null,
+        "first_relevant_rank": null,
+        "reciprocal_rank": 0.0
+      }
+    },
+    {
+      "id": "q14",
+      "category": "should_refuse",
+      "query": "Who is the current CEO of URA?",
+      "relevant_chunk_ids": [],
+      "retrieved_top_k": [
+        "Summary-EI_p5_t0_r1",
+        "Summary-EI_p5_t0_r2",
+        "Summary-EI_p5_t0_r3",
+        "Summary-FC-v2_p1_t1_r5",
+        "Summary-B1_p0_t0_r2",
+        "Summary-B2_p0_t0_r2",
+        "Summary-BP_p0_t0_r2",
+        "Summary-CCI_p0_t0_r7",
+        "Summary-HMC_p0_t0_r3",
+        "Summary-EI_p0_t0_r7"
+      ],
+      "metrics": {
+        "precision_at_5": 0.0,
+        "recall_at_5": null,
+        "precision_at_10": 0.0,
+        "recall_at_10": null,
+        "first_relevant_rank": null,
+        "reciprocal_rank": 0.0
+      }
+    },
+    {
+      "id": "q15",
+      "category": "should_refuse",
+      "query": "What is the plot ratio for my plot of land at 123 Sengkang Drive?",
+      "relevant_chunk_ids": [],
+      "retrieved_top_k": [
+        "Summary-PW_p0_t0_r3",
+        "Summary-CCI_p0_t0_r3",
+        "Summary-EI_p0_t0_r3",
+        "Summary-CCI_p0_t0_r2",
+        "Summary-EI_p0_t0_r2",
+        "Summary-PW_p0_t0_r2",
+        "Summary-PW_p0_t0_r4",
+        "Summary-CCI_p0_t0_r4",
+        "Summary-EI_p0_t0_r4",
+        "Summary-EI_p0_t0_r1"
+      ],
+      "metrics": {
+        "precision_at_5": 0.0,
+        "recall_at_5": null,
+        "precision_at_10": 0.0,
+        "recall_at_10": null,
+        "first_relevant_rank": null,
+        "reciprocal_rank": 0.0
+      }
+    }
+  ]
+}

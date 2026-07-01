@@ -41,9 +41,9 @@ with pdfplumber.open('data/raw/Summary-B1.pdf') as pdf:
 "
 
 it needs some data cleaning even after pdfplumber. pandas and what not. the standard remove empty values, forward fill ->
-![alt text](image.png)
+![alt text](readmeImages/image.png)
 it becomes
-![alt text](image-1.png)
+![alt text](readmeImages/image-1.png)
 
 Tables are the dominant content type in URA's planning summaries. I used pdfplumber for table-aware extraction, then a small normalization step: forward-fill the parameter column across wrap-around rows, drop empty phantom columns, filter empty rows. Each cleaned row becomes a chunk like 'Road Buffer | Category 1 – Expressway | 15m (5m green buffer)' — fully self-contained for retrieval. Bullet lists inside cells are preserved as \n• item strings, so the LLM still sees structured guidance, not flattened prose."
 
@@ -112,4 +112,171 @@ test_questions = [
     ]
 Summary handbooks dont have actual residential plot ratios. Only in Amendment Plan PDf. (to add in or add more relevant test questions)
 
-For
+Gemini API Key in .env: not in git, isolated to current project, survives on different shell sessions
+Google AI Studio -> API key
+Successfully installed google-auth-2.50.0 google-genai-1.47.0 pyasn1-0.6.3 pyasn1-modules-0.4.2
+    - Prompting and receive responses (google-genai)
+    - Authentical Protocols (google-auth)
+    - working with google-auth, crytography translators (pyasn1 & pyasn1-modules)
+
+client.models.generate_content() 
+    — what I'm using: send a prompt, get a text response all in one go
+    - user waits for a while before seeing a single text response
+client.models.generate_content_stream() 
+    — response shows as if (E.g a person typing in real time)
+    - Good for long responses (user experience tweak)
+    - dont have to wait for a while to see first text response appear
+client.models.list()
+    - lists all models available to your API key
+client.files.upload() 
+    — upload files (PDFs, images) to pass as context
+client.chats.create() 
+    — start a multi-turn conversation session
+    - creates convo history automatically, creates a convo state
+    - current implementation have no convo state
+    - memory tracking
+
+Correct Output:
+========================================================================
+Q: What is the road buffer for an expressway?
+========================================================================
+
+The road buffer for a Category 1 – Expressway is 15m, which includes a 5m green buffer [1, 2, 3, 4, 5].
+
+Sources used:
+  [1] Summary-Commercial.pdf, p0
+      Road Buffer | Category 1 – Expressway | 15m (5m green)...
+  [2] Summary-Hotel.pdf, p0
+      Road Buffer | Category 1 – Expressway | 15m (5m green)...
+  [3] Summary-BP.pdf, p0
+      Road Buffer | Category 1 – Expressway | 15m (5m green buffer)...
+  [4] Summary-CCI.pdf, p1
+      Road Buffer | Category 1 – Expressway | 15m (5m green buffer)...
+  [5] Summary-CCI.pdf, p5
+      Road Buffer | Category 1 – Expressway | 15m (5m green buffer)...
+
+
+Incorrect output:
+========================================================================
+Q: Is a void deck included as GFA?
+========================================================================
+
+I cannot find this information in the provided documents.
+
+Sources used:
+  [1] Summary_GFA.pdf, p2
+      Void Deck | ✓...
+  [2] Summary_GFA.pdf, p0
+      GFA...
+  [3] Summary_GFA.pdf, p0
+      GFA*...
+  [4] Summary_GFA.pdf, p1
+      Items | GFA* | Above...
+  [5] Summary_GFA.pdf, p2
+      Items | GFA* | Above...
+
+LLM doesnt know what column the '✓' is under Column header "Included as GFA" information lives in a table header
+on a different chunk. Chunk is retrieval correct but semantically incomplete
+
+More data cleaning. Instead of "Void Deck | ✓", emit "Void Deck → Included as GFA" at extraction time by mapping the column position to the header name under extract.py script.
+
+notable correct rejection (guardrail) from Gemini 2.5 Augmentation:
+========================================================================
+Q: What is the maximum plot ratio for residential developments?
+========================================================================
+
+I cannot find this information in the provided documents.
+
+Sources used:
+  [1] Summary-Semi-Detached.pdf, p0
+      Plot Size and Width (minimum) | Semi-Detached Houses (Side-to- side) Size: 200sqm Width: 8m | Semi-Detached Houses (Back-to- back) Size: 200sqm Width: 10m...
+  [2] Summary-CCI.pdf, p0
+      Gross Plot Ratio | Within Central Area and within other commercial centres, including party- wall developments such as in Geylang area | Subject to evaluation a...
+  [3] Summary-EI.pdf, p0
+      Gross Plot Ratio | Within Central Area and within other commercial centres, including party-wall developments such as in Geylang area | Subject to evaluation an...
+  [4] Summary-PW.pdf, p0
+      Gross Plot Ratio | Within Central Area and within other commercial centres, including party-wall developments such as in Geylang area | Subject to evaluation an...
+  [5] Summary-CCI.pdf, p4
+      Gross Plot Ratio & Storey Height | Subject to evaluation and localised urban design guidelines...
+
+only provided plot size, minimum land dimensions required. Plot ratio: total floor area you're allowed to build divided by the land area. Correct answer text: "maximum gross plot ratio: 1.4". Correct answer only found in Amendment Plan. ACTUALLY it can be found in Summary-EI.pdf:
+
+"Summary-EI.pdf", "page": 0, "chunk_type": "table_row", "parameter": "Gross Plot\nRatio", "text": "Gross Plot Ratio | Location | GPR", "raw_cells": ["Gross Plot\nRatio", "", "Location", "", "GPR"]}
+{"chunk_id": "Summary-EI_p0_t0_r2", "source_file": "Summary-EI.pdf", "page": 0, "chunk_type": "table_row", "parameter": "Gross Plot\nRatio", "text": "Gross Plot Ratio | Within landed and low-density housing areas with GPR less than or equal to 1.4 | Up to 1.0", "raw_cells": ["Gross Plot\nRatio", "", "Within landed and low-density\nhousing areas with GPR less than\nor equal to 1.4", "", "Up to 1.0"]}
+{"chunk_id": "Summary-EI_p0_t0_r3", "source_file": "Summary-EI.pdf", "page": 0, "chunk_type": "table_row", "parameter": "Gross Plot\nRatio", "text": "Gross Plot Ratio | At the fringe of landed and low- density housing areas with GPR less than or equal to 1.4", "raw_cells": ["Gross Plot\nRatio", "", "At the fringe of landed and low-\ndensity housing areas with GPR\nless than or equal to 1.4", "", ""]}
+{"chunk_id": "Summary-EI_p0_t0_r4", "source_file": "Summary-EI.pdf", "page": 0, "chunk_type": "table_row", "parameter": "Gross Plot\nRatio", "text": "Gross Plot Ratio | Within HDB estates and in areas with GPR more than 1.4 | Up to 1.4", "raw_cells": ["Gross Plot\nRatio", "", "Within HDB estates and in areas\nwith GPR more than 1.4", "", "Up to 1.4"]}
+{"chunk_id": "Summary-EI_p0_t0_r5", "source_file": "Summary-EI.pdf", "page": 0, "chunk_type": "table_row", "parameter": "Gross Plot\nRatio", "text": "Gross Plot Ratio | Within or at the fringe of industrial estates", "raw_cells": ["Gross Plot\nRatio", "", "Within or at the fringe of\nindustrial estates", "", ""]}
+
+# this chunk was only retrieved. No numerical information
+{"chunk_id": "Summary-EI_p0_t0_r6", "source_file": "Summary-EI.pdf", "page": 0, "chunk_type": "table_row", "parameter": "Gross Plot\nRatio", "text": "Gross Plot Ratio | Within Central Area and within other commercial centres, including party-wall developments such as in Geylang area | Subject to evaluation and localised urban design guidelines", "raw_cells": ["Gross Plot\nRatio", "", "Within Central Area and within\nother commercial centres,\nincluding party-wall\ndevelopments such as in\nGeylang area", "", "Subject to evaluation and\nlocalised urban design guidelines"]}
+
+debugged and realized. RETRIEVAL issue. sentence transformer "all-MiniLM-L6-v2" did not connect "HDB estates" "low Density housing" to "Residential" keyword. Singapore specific associations are not strong in this tiny transformer data. Will try bigger K value, more chunks retrieved. k=15
+
+
+![alt text](readmeImages/image-2.png)
+3 out of 4 correct behaviors
+
+How frontier labs handle table columns cell misalignment format issues:
+they don't extract tables into text upfront. They use vision models that see the document as an image and reason over the layout natively. Vision models consume more tokens. Our version uses text extraction for retrieval, cheap. Considering a Hybrid model. If retrieved chunks include checkbox tables/ layout sensitive content, send original 1 page to vision model
+
+For production consider: document AI service (AWS Textract, Google Document AI, Azure Document Intelligence) for extraction. These already handle tables, multi-column layouts, checkboxes — trained on enormous corpora. Document AI services cost $1–10 per 1,000 pages. 2–3x the tokens consumed for a vision model. Frontier models also cant solve table misalignments via text extraction approach. hence, neededing to provide quality answers to paying users, vision model is most effective (sans the x3 times the cost). Also Frontier models do not have a pre-built index, it uses what users uploads directly
+
+
+Handling Q: What is the maximum plot ratio for residential developments? issue.
+Answer found raw chunks. However query and generate did not manage to link residential to HDB and
+low density housing area
+Embedding model (sentence transformer) treats "Within Central Area and within other commercial centres" as more semantically similar to "residential developments" than "Within landed and low-density housing areas."
+Answer: Consider OpenAI embedding model/ Voyage AI, Hybrid retrieval (lexical and semantic), Fine tune own
+embedding model
+
+
+Handling Q: Is a void deck included as GFA? issue (TODO) also find out what is the limit for Gemini 2.5 flash LLM generation
+Trying to improve extract.py
+![alt text](readmeImages/image-4.png)
+headers like GFA Over and Above Master Plan Control* are stacked on different and invisible rows. our old code totally discards headers as data.
+Old code does not have header to table cell data relation. Hence Augmentation did not generate required answer.
+like:
+![alt text](readmeImages/image-3.png)
+
+checking new extract.py's chunks.jsonl if handles edge case: E.g Summary-EI.pdf where ALL EI Developments is a header.
+why jsonl instead of json. jsonl makes it possible to be streamed and parsed line by line.
+jsonl used for large datasets
+json used for configuration files
+
+Now need to measure chunking quality. if our chunking strategy is effective enough (from the ground up each phase has its own quality metrics)
+For your project, a 15-query golden set is realistic. Build it in an afternoon... (thinking if i should try this) (shall stick to new extraction pipeline first)
+Eval harness -> Docker + UI
+
+Eval harness:
+queries.jsonl
+eval.py ()
+eval_results/json (raw output)
+eval_summary.md (human readable)
+
+eval.py: runs 15 queries, retrieves all results, compares results against Ground Truth (hand picked golden set queries with correct chunks), 
+computes statistics E.g Precision@k Recall@k MRR@k. saves the result for future comparision if a different transformer is used or a different vector DB is used.
+
+Precision@k: 
+Precision@5 = (relevant chunks in top 5) / k
+chroma retrieved top 5 chunks (assuming k = 5). if 2 found relevant to query, 2/5 = 0.4 points of trustworthiness. relevant == chunk correspond to hand found Ground Truth.
+measures amount of noise in retrieved
+
+Recall@k: (relevant chunks in top 5) / (total relevant chunks in golden set)
+coverage, able to find everything i should have
+
+MRR (Mean Reciprocal Rank):
+on average, how far down the list was the first relevant result found?
+Reciprocal Rank: 1/ index position E.g 1/3 == 0.33
+
+Other evaluation harnesses (using LLM on texts not rankings):
+Hit Rate@K
+nDCG@K
+Mean Average Precision (MAP)
+Recall@K for K = corpus size
+Generation-specific metrics
+Faithfulness/Groundedness (hallucination check)
+Answer relevance
+contezt utilization
+
+use evaluations when swapping chukning or embedding or retrieval. one at a time to measure what changed.
+

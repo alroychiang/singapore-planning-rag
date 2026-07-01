@@ -107,6 +107,8 @@ def process_pdf(pdf_path):
             # Table chunks
             for t_idx, table in enumerate(tables):
                 cleaned = clean_table(table)
+                # skips row 0 entirely as it is considered a header. then collects the rest data as chunks. 
+                # no header to cell relation data is chunked.
                 for r_idx, row in enumerate(cleaned[1:], start=1):
                     text = row_to_text(row)
                     if not text:

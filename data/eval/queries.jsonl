@@ -1,0 +1,15 @@
+{"id": "q01", "category": "parameter_table", "query": "What is the road buffer for an expressway?", "relevant_chunk_ids": ["Summary-B1_p0_t0_r3", "Summary-B2_p0_t0_r3", "Summary-Commercial_p0_t0_r3"]}
+{"id": "q02", "category": "parameter_table", "query": "What is the minimum unit size for B1 industrial developments?", "relevant_chunk_ids": ["Summary-B1_p1_t0_r6"]}
+{"id": "q03", "category": "parameter_table", "query": "What is the minimum floor-to-floor height in B1 industrial buildings?", "relevant_chunk_ids": ["Summary-B1_p0_t0_r10"]}
+{"id": "q04", "category": "checkbox_table", "query": "Is a void deck included as GFA?", "relevant_chunk_ids": ["Summary_GFA_p2_t0_r18"]}
+{"id": "q05", "category": "checkbox_table", "query": "Are bay windows counted toward GFA?", "relevant_chunk_ids": ["Summary_GFA_p0_t3_r4"], "note": "Chunk exists but text reads 'Bay Windows: col_3' due to failed header reconstruction. Retrieval should still find it; generation will likely fail. This is a real extraction bug the eval surfaces."}
+{"id": "q06", "category": "checkbox_table", "query": "Is a roof cover excluded from GFA calculations?", "relevant_chunk_ids": ["Summary_GFA_p2_t0_r1"]}
+{"id": "q07", "category": "domain_terminology", "query": "What is the maximum plot ratio for HDB residential estates?", "relevant_chunk_ids": ["Summary-CCI_p0_t0_r4", "Summary-EI_p0_t0_r4", "Summary-PW_p0_t0_r4"]}
+{"id": "q08", "category": "domain_terminology", "query": "What is the GPR for landed housing fringe areas?", "relevant_chunk_ids": ["Summary-CCI_p0_t0_r3", "Summary-EI_p0_t0_r3", "Summary-PW_p0_t0_r3"]}
+{"id": "q09", "category": "domain_terminology", "query": "What zoning covers religious buildings like temples and mosques?", "relevant_chunk_ids": ["MP25WrittenStatement_p16_t0_r1"]}
+{"id": "q10", "category": "prose", "query": "What is the definition of plot ratio in the Master Plan?", "relevant_chunk_ids": ["MP25WrittenStatement_p5_para0"]}
+{"id": "q11", "category": "prose", "query": "Which act defines what counts as a national park?", "relevant_chunk_ids": ["MP25WrittenStatement_p5_para0"]}
+{"id": "q12", "category": "prose", "query": "When was the first Master Plan for Singapore approved?", "relevant_chunk_ids": ["MP25WrittenStatement_p2_para0"]}
+{"id": "q13", "category": "should_refuse", "query": "What is the average cost of a condominium in Singapore?", "relevant_chunk_ids": []}
+{"id": "q14", "category": "should_refuse", "query": "Who is the current CEO of URA?", "relevant_chunk_ids": []}
+{"id": "q15", "category": "should_refuse", "query": "What is the plot ratio for my plot of land at 123 Sengkang Drive?", "relevant_chunk_ids": []}
