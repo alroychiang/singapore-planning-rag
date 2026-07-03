@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-07-01T05:46:54+00:00",
+  "run_at": "2026-07-03T08:24:45+00:00",
   "embedding_model": "all-MiniLM-L6-v2",
   "k_values": [
     5,
@@ -67,9 +67,9 @@
       "category": "parameter_table",
       "query": "What is the road buffer for an expressway?",
       "relevant_chunk_ids": [
-        "Summary-B2_p0_t0_r3",
         "Summary-Commercial_p0_t0_r3",
-        "Summary-B1_p0_t0_r3"
+        "Summary-B1_p0_t0_r3",
+        "Summary-B2_p0_t0_r3"
       ],
       "retrieved_top_k": [
         "Summary-Commercial_p0_t0_r3",
@@ -81,7 +81,7 @@
         "Summary-CCI_p5_t0_r2",
         "Summary-HMC_p0_t0_r6",
         "Summary-PW_p2_t0_r1",
-        "Summary-Transport_p0_t0_r4"
+        "Summary-SR_p0_t0_r5"
       ],
       "metrics": {
         "precision_at_5": 0.6,
@@ -109,7 +109,7 @@
         "MP25WrittenStatement_p14_t0_r1",
         "Summary-BP_p1_t0_r7",
         "MP25WrittenStatement_p14_t0_r2",
-        "Summary-Semi-Detached_p4_t1_r2"
+        "Summary-FC-v2_p5_t1_r3"
       ],
       "metrics": {
         "precision_at_5": 0.2,
@@ -137,7 +137,7 @@
         "Summary-Commercial_p5_t1_r5",
         "Summary-FC-v2_p2_t0_r4",
         "Summary-Commercial_p0_t0_r10",
-        "Summary-HMC_p0_t0_r5"
+        "Summary-EI_p1_t0_r1"
       ],
       "metrics": {
         "precision_at_5": 0.2,
@@ -237,9 +237,9 @@
       "category": "domain_terminology",
       "query": "What is the maximum plot ratio for HDB residential estates?",
       "relevant_chunk_ids": [
-        "Summary-EI_p0_t0_r4",
+        "Summary-PW_p0_t0_r4",
         "Summary-CCI_p0_t0_r4",
-        "Summary-PW_p0_t0_r4"
+        "Summary-EI_p0_t0_r4"
       ],
       "retrieved_top_k": [
         "Summary-PW_p0_t0_r4",
@@ -393,7 +393,7 @@
         "dc25-11_DTC_p0_t0_r1",
         "MP25WrittenStatement_p25_t0_r3",
         "Summary-Commercial_p0_t0_r1",
-        "Summary-Transport_p0_t0_r1"
+        "Summary-HMC_p0_t0_r2"
       ],
       "metrics": {
         "precision_at_5": 0.2,
@@ -445,7 +445,7 @@
         "Summary-BP_p0_t0_r2",
         "Summary-CCI_p0_t0_r7",
         "Summary-HMC_p0_t0_r3",
-        "Summary-EI_p0_t0_r7"
+        "Summary-SR_p0_t0_r2"
       ],
       "metrics": {
         "precision_at_5": 0.0,
@@ -471,7 +471,7 @@
         "Summary-PW_p0_t0_r4",
         "Summary-CCI_p0_t0_r4",
         "Summary-EI_p0_t0_r4",
-        "Summary-EI_p0_t0_r1"
+        "Summary-CCI_p0_t0_r1"
       ],
       "metrics": {
         "precision_at_5": 0.0,

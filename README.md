@@ -55,6 +55,8 @@ doing a script check for prose chunks and table chunks of script output
 
 Every one of those terms (Downtown Core, CBD, City Hall, Bugis, Marina Centre, Nicoll) appears in the table cells. So the filter sees ~80% word overlap and drops it. The filter can't distinguish "intro paragraph describing topics covered by the table" from "garbled reconstruction of the table as text."
 
+"Summary-BP_p0_t0_r1" chunk id means page 0, table 0 first row
+
 picking between sentence transformers, openAI or voyage AI for embeddings
 
 picked: sentence transformers. I used a local open-source embedding model so the pipeline is reproducible end-to-end. also my database is 20 documents only. Bigger documents will use OpenAI or voyageAI.
@@ -207,7 +209,7 @@ only provided plot size, minimum land dimensions required. Plot ratio: total flo
 {"chunk_id": "Summary-EI_p0_t0_r4", "source_file": "Summary-EI.pdf", "page": 0, "chunk_type": "table_row", "parameter": "Gross Plot\nRatio", "text": "Gross Plot Ratio | Within HDB estates and in areas with GPR more than 1.4 | Up to 1.4", "raw_cells": ["Gross Plot\nRatio", "", "Within HDB estates and in areas\nwith GPR more than 1.4", "", "Up to 1.4"]}
 {"chunk_id": "Summary-EI_p0_t0_r5", "source_file": "Summary-EI.pdf", "page": 0, "chunk_type": "table_row", "parameter": "Gross Plot\nRatio", "text": "Gross Plot Ratio | Within or at the fringe of industrial estates", "raw_cells": ["Gross Plot\nRatio", "", "Within or at the fringe of\nindustrial estates", "", ""]}
 
-# this chunk was only retrieved. No numerical information
+this chunk was only retrieved. No numerical information
 {"chunk_id": "Summary-EI_p0_t0_r6", "source_file": "Summary-EI.pdf", "page": 0, "chunk_type": "table_row", "parameter": "Gross Plot\nRatio", "text": "Gross Plot Ratio | Within Central Area and within other commercial centres, including party-wall developments such as in Geylang area | Subject to evaluation and localised urban design guidelines", "raw_cells": ["Gross Plot\nRatio", "", "Within Central Area and within\nother commercial centres,\nincluding party-wall\ndevelopments such as in\nGeylang area", "", "Subject to evaluation and\nlocalised urban design guidelines"]}
 
 debugged and realized. RETRIEVAL issue. sentence transformer "all-MiniLM-L6-v2" did not connect "HDB estates" "low Density housing" to "Residential" keyword. Singapore specific associations are not strong in this tiny transformer data. Will try bigger K value, more chunks retrieved. k=15
@@ -260,9 +262,19 @@ Precision@k:
 Precision@5 = (relevant chunks in top 5) / k
 chroma retrieved top 5 chunks (assuming k = 5). if 2 found relevant to query, 2/5 = 0.4 points of trustworthiness. relevant == chunk correspond to hand found Ground Truth.
 measures amount of noise in retrieved
+why does the pipeline pick up irrelevant chunks
+why is this good to measure?: almost never the case that vector databases are the fault during debugging.
+First, check how is your data extracted from raw sources into jsonl. (chunk quality)
+Second, check if chunks are too big or too small (granularity)
+Third, user phrasing prompt
+Only then check embedding model and then vectorDB (last) (Chroma, Pinecone, Weaviate all use cosine similarity)
+the /k is kinda useless... why do we use this metric when we have Recall@K already? do we rely on recall@k more when 
+we have successfuly obtained a Golden Dataset? If our golden dataset have ALOT of ground truth chunks.
 
-Recall@k: (relevant chunks in top 5) / (total relevant chunks in golden set)
+Recall@k: 
+(relevant chunks in top 5) / (total relevant chunks in golden set)
 coverage, able to find everything i should have
+why is this good to measure?: 
 
 MRR (Mean Reciprocal Rank):
 on average, how far down the list was the first relevant result found?
@@ -280,3 +292,23 @@ contezt utilization
 
 use evaluations when swapping chukning or embedding or retrieval. one at a time to measure what changed.
 
+"What is the average cost of a condominium in Singapore?",
+"Who is the current CEO of URA?",
+"What is the plot ratio for my plot of land at 123 Sengkang Drive?"
+all produced cant find info (which is what we want)
+
+Streamlit is tailored for Python heavy projects. UI capability limited. Used mostly for demos & not production (no Flask, HTML, CSS, Javascript needed)
+
+Facing alot of limitations for Gemini 2.5 Flash API usages. Trying ollama local LLM for generative step only.
+Downloading ollama: ollama pull llama3.2:3b
+it works with ollama. even better than Gemini imo.
+seeing evaluation.py now.
+
+Overall (scored queries only, n=12):
+  Precision@5:  0.250
+  Recall@5:     0.806
+  Recall@10:    0.917
+  MRR:          0.609
+
+Run container in terminal:
+docker run -p 8501:8501 --env-file .env singapore-planning-rag

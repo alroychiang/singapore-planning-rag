@@ -4,19 +4,19 @@ RAG generation: retrieve chunks, augment prompt, generate grounded answer.
 Pipeline per question:
 1. Reuse query() from query.py to get top-K chunks from Chroma
 2. Build an augmented prompt: instructions + numbered context + question
-3. Send to Gemini, return the answer
+3. Send to LLM (Ollama by default, Gemini via LLM_BACKEND=gemini), return the answer
 
 The LLM is instructed to:
 - Answer ONLY from provided context (no training-data hallucinations)
 - Cite sources by their [N] number in the context block
 - Say "I cannot find this in the provided documents" if the answer isn't there
 
-This last rule is the most important guardrail. It mirrors the "N/A instead
-of hallucinate" pattern from the Apple extraction pipeline.
-
-Requires: GOOGLE_API_KEY in environment (or in a .env file at repo root)
-
-takes query output (chunks) & inserts into a structured prompt before feeding Gemini API to produce a more human readable response
+Env vars:
+- LLM_BACKEND:    "ollama" (default) or "gemini"
+- OLLAMA_MODEL:   defaults to "llama3.2:3b"
+- OLLAMA_HOST:    defaults to "http://localhost:11434"
+- GOOGLE_API_KEY: required if LLM_BACKEND=gemini
+- GEMINI_MODEL:   defaults to "gemini-2.5-flash-lite"
 """
 
 import os
@@ -25,29 +25,20 @@ from pathlib import Path
 
 import chromadb
 from dotenv import load_dotenv
-from google import genai
 from sentence_transformers import SentenceTransformer
 
 load_dotenv()  # reads .env if present
 
-API_KEY = os.environ.get("GOOGLE_API_KEY")
-if not API_KEY:
-    sys.exit(
-        "GOOGLE_API_KEY not set. Add it to .env or export it in your shell."
-    )
-
-# Gemini
-client = genai.Client(api_key=API_KEY)
-MODEL = "gemini-2.5-flash"
+BACKEND = os.environ.get("LLM_BACKEND", "ollama").lower()
 
 # Retrieval
 CHROMA_DIR = Path("data/processed/chroma")
 COLLECTION_NAME = "ura_planning"
-MODEL_NAME = "all-MiniLM-L6-v2"
+EMBED_MODEL_NAME = "all-MiniLM-L6-v2"
 
 chroma_client = chromadb.PersistentClient(path=str(CHROMA_DIR))
 collection = chroma_client.get_collection(COLLECTION_NAME)
-embed_model = SentenceTransformer(MODEL_NAME)
+embed_model = SentenceTransformer(EMBED_MODEL_NAME)
 
 
 PROMPT_TEMPLATE = """You are an assistant that answers questions about Singapore Urban Redevelopment Authority (URA) planning guidelines.
@@ -63,6 +54,46 @@ Question: {question}
 
 Answer:"""
 
+
+# ---------- Backend dispatch ----------
+
+if BACKEND == "gemini":
+    from google import genai
+
+    API_KEY = os.environ.get("GOOGLE_API_KEY")
+    if not API_KEY:
+        sys.exit("GOOGLE_API_KEY not set. Add it to .env or unset LLM_BACKEND.")
+
+    MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash-lite")
+    _client = genai.Client(api_key=API_KEY)
+
+    def run_llm(prompt: str) -> str:
+        response = _client.models.generate_content(
+            model=MODEL,
+            contents=prompt,
+        )
+        return response.text
+
+elif BACKEND == "ollama":
+    import ollama
+
+    OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
+    MODEL = os.environ.get("OLLAMA_MODEL", "llama3.2:3b")
+    _client = ollama.Client(host=OLLAMA_HOST)
+
+    def run_llm(prompt: str) -> str:
+        response = _client.chat(
+            model=MODEL,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        return response["message"]["content"]
+
+else:
+    sys.exit(f"Unknown LLM_BACKEND: '{BACKEND}'. Use 'ollama' or 'gemini'.")
+
+
+# ---------- Retrieval ----------
+
 def query(question: str, k: int = 15):
     """Embed a question and return the top-K nearest chunks from Chroma."""
     q_vec = embed_model.encode(question)
@@ -71,8 +102,7 @@ def query(question: str, k: int = 15):
         n_results=k,
     )
 
-# source of data, ground truth only for the LLM to look through. (creating database for LLM)
-# LLM doesnt look through corpus manually
+
 def build_context(results: dict) -> str:
     """Format Chroma results into a numbered context block for the LLM."""
     documents = results["documents"][0]
@@ -85,23 +115,19 @@ def build_context(results: dict) -> str:
     return "\n\n".join(lines)
 
 
+# ---------- Public API ----------
+
 def generate(question: str, k: int = 15) -> dict:
-    """Retrieve k chunks, ask Gemini to answer using them. Returns answer + sources."""
-    # uses function from query.py. Custom questions found in this .py file
+    """Retrieve k chunks, ask LLM to answer using them. Returns answer + sources."""
     results = query(question, k=k)
     context = build_context(results)
-    # Finalize a prompt with Database Ground truth, user question and guardrails for LLM
     prompt = PROMPT_TEMPLATE.format(context=context, question=question)
+    answer = run_llm(prompt)
 
-    # gemini 2.5 flash API client library
-    response = client.models.generate_content(
-        model=MODEL,
-        contents=prompt,
-    )
     distances = results["distances"][0]
     return {
         "question": question,
-        "answer": response.text,
+        "answer": answer,
         "sources": [
             {
                 "n": i + 1,
@@ -131,15 +157,11 @@ def pretty_print(result: dict) -> None:
 
 
 def main():
-    # test_questions = [
-    #     "What is the road buffer for an expressway?",
-    #     "Is a void deck included as GFA?",
-    #     "What is the maximum plot ratio for residential developments?",
-    #     "What is the minimum unit size for B1 industrial developments?",
-    # ]
-
+    print(f"Backend: {BACKEND}  |  Model: {MODEL}\n")
     test_questions = [
-        "What is the maximum plot ratio for residential developments?",
+        "What is the average cost of a condominium in Singapore?",
+        "Who is the current CEO of URA?",
+        "What is the plot ratio for my plot of land at 123 Sengkang Drive?",
     ]
 
     for q in test_questions:

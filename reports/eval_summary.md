@@ -1,6 +1,6 @@
 # Retrieval Evaluation
 
-Run on 2026-07-01T05:46:54+00:00  
+Run on 2026-07-03T08:24:45+00:00  
 Embedding model: `all-MiniLM-L6-v2`  
 Queries scored (excludes should_refuse): 12
 
@@ -36,7 +36,7 @@ the actual refusal behavior is tested by the generation layer, not this harness.
 *What is the road buffer for an expressway?*
 - First relevant chunk rank: `1`
 - Precision@5: 0.600, Recall@5: 1.000
-- Relevant IDs: `['Summary-B2_p0_t0_r3', 'Summary-Commercial_p0_t0_r3', 'Summary-B1_p0_t0_r3']`
+- Relevant IDs: `['Summary-Commercial_p0_t0_r3', 'Summary-B1_p0_t0_r3', 'Summary-B2_p0_t0_r3']`
 
 ### q02 (parameter_table)
 *What is the minimum unit size for B1 industrial developments?*
@@ -72,7 +72,7 @@ the actual refusal behavior is tested by the generation layer, not this harness.
 *What is the maximum plot ratio for HDB residential estates?*
 - First relevant chunk rank: `1`
 - Precision@5: 0.600, Recall@5: 1.000
-- Relevant IDs: `['Summary-EI_p0_t0_r4', 'Summary-CCI_p0_t0_r4', 'Summary-PW_p0_t0_r4']`
+- Relevant IDs: `['Summary-PW_p0_t0_r4', 'Summary-CCI_p0_t0_r4', 'Summary-EI_p0_t0_r4']`
 
 ### q08 (domain_terminology)
 *What is the GPR for landed housing fringe areas?*
