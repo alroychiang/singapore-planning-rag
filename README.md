@@ -310,5 +310,35 @@ Overall (scored queries only, n=12):
   Recall@10:    0.917
   MRR:          0.609
 
+build docker file:
+docker build -t singapore-planning-rag .
+reads Dockerfile (static on your local PC), follows instruction on it
+streamlit ui backed into Dockerfile
+
 Run container in terminal:
-docker run -p 8501:8501 --env-file .env singapore-planning-rag
+docker run -p 8501:8501 --env-file .env -e LLM_BACKEND=gemini singapore-planning-rag
+Enter this URL in your safari: (or copy the link your terminal shows)
+    Local URL: http://localhost:8501
+    - users pulling image onto their own machine
+maps container port 8501 to mac's port ____
+reads .env file API key (user needs to have .env & key there)
+Docker image file cannot use ollama. Only Gemini API key
+
+external user:
+install docker desktop on their local machine
+pull image "docker pull yourusername/singapore-planning-rag"
+run image "docker run -p 8501:8501 --env-file .env yourusername/singapore-planning-rag"
+open browser "http://localhost:8501"
+
+generate.py is a function repository and used for manual testing. Can't delete but need not run when corpus changes/ rebuilds. Only required to run extract_new, embed, index, streamlit_app in terminal.
+
+Trying Qwen to see if it follows instructions properly:
+ollama pull qwen3:4b
+OLLAMA_MODEL=qwen3:4b (.env)
+
+if i want to delete a stored model: ollama rm llama3.2:3b
+to list all models i have ollama list
+testing all query questions (so far good)
+Are bay windows counted toward GFA? <--- cant find
+
+rembr to clean up chroma db each time indexed. only the latest one is best.

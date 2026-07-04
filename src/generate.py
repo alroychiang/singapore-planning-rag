@@ -13,7 +13,7 @@ The LLM is instructed to:
 
 Env vars:
 - LLM_BACKEND:    "ollama" (default) or "gemini"
-- OLLAMA_MODEL:   defaults to "llama3.2:3b"
+- OLLAMA_MODEL:   defaults to "qwen3:4b"
 - OLLAMA_HOST:    defaults to "http://localhost:11434"
 - GOOGLE_API_KEY: required if LLM_BACKEND=gemini
 - GEMINI_MODEL:   defaults to "gemini-2.5-flash-lite"
@@ -78,7 +78,8 @@ elif BACKEND == "ollama":
     import ollama
 
     OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
-    MODEL = os.environ.get("OLLAMA_MODEL", "llama3.2:3b")
+    # defaults as safety net
+    MODEL = os.environ.get("OLLAMA_MODEL", "qwen3:4b")
     _client = ollama.Client(host=OLLAMA_HOST)
 
     def run_llm(prompt: str) -> str:
@@ -121,6 +122,7 @@ def generate(question: str, k: int = 15) -> dict:
     """Retrieve k chunks, ask LLM to answer using them. Returns answer + sources."""
     results = query(question, k=k)
     context = build_context(results)
+    print(context)
     prompt = PROMPT_TEMPLATE.format(context=context, question=question)
     answer = run_llm(prompt)
 
@@ -159,7 +161,7 @@ def pretty_print(result: dict) -> None:
 def main():
     print(f"Backend: {BACKEND}  |  Model: {MODEL}\n")
     test_questions = [
-        "What is the average cost of a condominium in Singapore?",
+        "What is the road buffer for an expressway?",
         "Who is the current CEO of URA?",
         "What is the plot ratio for my plot of land at 123 Sengkang Drive?",
     ]

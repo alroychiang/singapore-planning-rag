@@ -14,16 +14,21 @@
 #
 # Then open http://localhost:8501
 
+# a mini operating system w/ python installed
+# FROM sets base image of the container, docker things build on top of this
 FROM python:3.11-slim
 
+# sets working directory inside container
 WORKDIR /app
 
 # Install Python dependencies first (cache-friendly: only re-runs on requirements change)
+# installs sentence transformer library (no weights installed yet)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Pre-download the sentence-transformer model into the image.
 # Adds ~90MB but eliminates first-request latency.
+# this code triggers the actual model weights download from Hugging face
 RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
 
 # Application code and the pre-built retrieval index
@@ -34,9 +39,14 @@ COPY data/processed/chroma/ ./data/processed/chroma/
 ENV LLM_BACKEND=gemini
 ENV GEMINI_MODEL=gemini-2.5-flash-lite
 
+# container's port. to be connected to mac's port on docker run time
+# just a note saying this container uses port 8501 internally
 EXPOSE 8501
 
-# --server.address=0.0.0.0 makes Streamlit listen on all interfaces
+# --server.address=0.0.0.0 allows container to have cnnections from outside itself other than processes running within
+# container.
+# "--server.headless=true" prevents the PC from opening the application using a browser window within the container
+# user has to manually go local host URL
 # (required so the host machine can reach the container)
 CMD ["streamlit", "run", "src/streamlit_app.py", \
      "--server.port=8501", \

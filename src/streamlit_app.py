@@ -54,6 +54,10 @@ st.set_page_config(
 st.markdown(
     """
     <style>
+    /* Trim the large default empty space at the top of the page */
+    .block-container {
+        padding-top: 2rem;
+    }
     /* Pin the bottom bar (holding both popovers) to the bottom-left */
     .st-key-bottom_bar {
         position: fixed;
@@ -118,13 +122,12 @@ with st.container(key="bottom_bar"):
 
 # ---------- Main UI (two columns: query left, references right) ----------
 
-left, right = st.columns(2)
+left, spacer, right = st.columns([1, 0.1, 1])
 
 with left:
     st.subheader("Singapore Planning RAG", anchor=False)
     st.caption(
-        "Ask questions about URA planning guidelines. Answers are grounded in "
-        "retrieved document chunks and cite their sources."
+        "Ask questions about URA planning guidelines from official URA published documents"
     )
 
     question = st.text_input(
@@ -134,11 +137,16 @@ with left:
     )
 
     k = st.slider(
-        "Number of references",
+        "No. of references",
         min_value=3,
         max_value=15,
         value=5,
-        help="Retrieves more chunks from our database",
+    )
+
+with right:
+    st.subheader("Retrieved references", anchor=False)
+    st.caption(
+        "Each reference shows its source document, page, and similarity score"
     )
 
 # ---------- Retrieve + generate on submit ----------
@@ -160,11 +168,6 @@ if question:
 
     # ----- Retrieved chunks (right column) -----
     with right:
-        st.subheader("Retrieved references", anchor=False)
-        st.caption(
-            "Each reference shows its source document, page, and similarity score"
-        )
-
         ids = results["ids"][0]
         documents = results["documents"][0]
         metadatas = results["metadatas"][0]
