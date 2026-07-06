@@ -54,10 +54,10 @@ http://localhost:8501
 ┌────────────┐        ┌────────────┐        ┌──────────────────────┐
 │  query.py  │───────▶│  Chroma DB │───────▶│     generate.py      │
 └────────────┘        └────────────┘        │                      │
-                                             │  Ollama (qwen3:4b)   │
-                                             │        or            │
-                                             │     Gemini API       │
-                                             └──────────┬───────────┘
+                                            │  Ollama (qwen3:4b)   │
+                                            │        or            │
+                                            │     Gemini API       │
+                                            └──────────┬───────────┘
                                                         │
                                                         ▼
                                           Grounded answer + citations
