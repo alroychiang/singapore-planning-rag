@@ -13,12 +13,17 @@ URA RAG system allows users to get answers based on official documents and sourc
 architecture diagram (ASCII): URA PDF documents in data -> chunking (extract.py) -> vectorize with sentence transformer (embed.py) -> index to vectorDB (chroma) -> retrieve chunk into LLM (qwen or gemini) for structured answer
 
 INDEX PIPELINE (one-time build):
+
+```
 ┌─────────────┐   ┌────────────┐   ┌────────────┐   ┌──────────┐   ┌────────────┐
 │  URA PDFs   │──▶│ extract.py │──▶│  embed.py  │──▶│ index.py │──▶│  Chroma DB │
 │ (data/raw)  │   │            │   │            │   │          │   │(persistent)│
 └─────────────┘   └────────────┘   └────────────┘   └──────────┘   └────────────┘
+```
 
 QUERY PIPELINE (per user question):
+
+```
   User query
       │
       ▼
@@ -32,6 +37,7 @@ QUERY PIPELINE (per user question):
                                                       │
                                                       ▼
                                           Grounded answer + citations
+```
 
 Design decisions
 Decided Chroma vectorDB because lightweight, easy to run locally, free (Pinecone is enterprise level, Weaviate supports hybrid search (lexical + semantic))
