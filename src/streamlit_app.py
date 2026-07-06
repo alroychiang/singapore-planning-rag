@@ -95,24 +95,6 @@ with st.container(key="bottom_bar"):
             - **Corpus**: 20 URA planning PDFs, ~770 chunks
             """
         )
-        st.divider()
-        st.markdown("**Known limitations**")
-        st.markdown(
-            """
-            Surfaced by the retrieval eval (`reports/eval_summary.md`):
-
-            - **Prose chunking too coarse.** Master Plan definitions live in
-              large paragraph chunks; single-definition queries can miss.
-            - **Extraction bug in one GFA table.** Header reconstruction
-              failed for the Bay Windows row, producing a chunk that reads
-              "Bay Windows: col_3".
-            - **Domain terminology.** General-purpose embeddings weakly
-              connect "residential" ↔ "HDB estates" / "landed housing".
-
-            Fixes in the roadmap: bbox-based prose extraction, hybrid
-            keyword+vector retrieval, upgrade to a stronger embedding model.
-            """
-        )
 
     with st.popover("queries", help="Tried-and-tested example queries"):
         st.markdown("**Example queries**")
