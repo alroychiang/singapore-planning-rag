@@ -1,4 +1,4 @@
-# GroundedSG — RAG Chatbot for Singapore Urban Planning Documents
+# RAG Chatbot for Singapore Urban Planning Documents
 
 A Retrieval-Augmented Generation (RAG) system that answers questions about Singapore URA planning documents — grounded in official sources, with citations, and without model hallucination.
 
